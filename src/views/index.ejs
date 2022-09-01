@@ -1,0 +1,51 @@
+<% layout('./layouts/main') %>
+
+<div class="row p-4">
+  <h1>Incio</h1>
+  <div class="col-8">
+    <div class="container border rounded shadow mt-4 p-3">
+      <div class="mt-5 text-center">
+        <p class="display-5">Lista de Productos</p>
+      </div>
+      <table class="table table-striped table-info rounded">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Imagen</th>
+          </tr>
+        </thead>
+        <tbody id="tableProducts"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container border rounded shadow mt-4 p-3 col-4">
+    <div class="display-5 mb-4">Centro de Mensajes</div>
+    <form id="formMessages">
+      <input
+        class="form-control"
+        id="emailUser"
+        type="email"
+        placeholder="Email"
+        required
+      />
+      <div class="mt-4 row text-center">
+        <div class="col-8">
+          <input
+            class="form-control"
+            id="messageUser"
+            type="text"
+            placeholder="Mensaje"
+          />
+        </div>
+        <div class="col-4">
+          <input class="btn btn-primary" type="submit" value="Enviar" />
+        </div>
+      </div>
+
+      <div class="mt-4 mb-4" id="messagesAll"></div>
+    </form>
+  </div>
+</div>

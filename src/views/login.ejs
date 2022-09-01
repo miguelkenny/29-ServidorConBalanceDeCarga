@@ -1,0 +1,32 @@
+<%- layout('layouts/main') %>
+
+<div class="row">
+  <div class="col-md-4 offset-md-4">
+    <div class="card mt-4 text-center">
+      <div class="card-header">
+        <h3>Iniciar Sesion</h3>
+      </div>
+      <div class="card-body">
+        <form class="mt-4" action="/login" method="post">
+          <div class="form-group>">
+            <input
+              class="form-control"
+              type="email"
+              name="email"
+              placeholder="Ingresar email..."
+              required
+            />
+            <input
+              class="form-control mt-2"
+              type="password"
+              name="password"
+              placeholder="Ingresar password..."
+              required
+            />
+            <button class="btn btn-primary btn-block mt-4" type="submit" name="">Iniciar Sesion</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
