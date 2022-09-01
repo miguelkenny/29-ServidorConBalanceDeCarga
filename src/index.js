@@ -40,7 +40,7 @@ if (iscluster && cluster.isPrimary) {
 } else {
     // Si estamos en modo Fork escuchamos el puerto
     //Congiguracion
-    app.use(express.static(path.join(__dirname, 'views/js')))
+    app.use(express.static(path.join(__dirname, 'views/clientSocket')))
     app.set('views', path.join(__dirname, 'views'))
     app.engine('ejs', engine)
     app.set('view engine', 'ejs')
@@ -82,6 +82,7 @@ if (iscluster && cluster.isPrimary) {
 // Aún no pude hacerlo funcionar con plantillas
 
 //Utilizamos Socket
+
 io.on('connection', (socket) => {
     console.log('New Connection!!!', socket.id);
 

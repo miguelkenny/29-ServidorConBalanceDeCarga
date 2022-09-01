@@ -58,7 +58,7 @@ router.get('/info', (req, res) => {
 })
 
 //Ruta para desafio N° 28
-router.get('/api/randoms', async (req, res) => {
+router.get('/api/randoms', (req, res) => {
     const { cant } = req.query
 
     console.log(cant)
@@ -66,17 +66,18 @@ router.get('/api/randoms', async (req, res) => {
     const forked = fork(path.join(__dirname + '/child.js'))
 
     if (!cant) {
-        forked.send(100000000)
+        forked.send(10000)
     } else {
         forked.send(cant)
     }
 
-    await forked.on('message', msg => {
+    forked.on('message', (msg) => {
         res.json({
             random_numbers: msg,
         })
     })
 })
+
 
 // Ruta para Desafio 29
 // Para no duplicar los servidores, apunto al mismo endpoint probandolos en distintos momentos. No se detectaron errores
