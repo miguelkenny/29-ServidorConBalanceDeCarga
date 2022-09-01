@@ -58,7 +58,7 @@ router.get('/info', (req, res) => {
 })
 
 //Ruta para desafio N° 28
-router.get('/api/randoms', (req, res) => {
+router.get('/api/randoms', async (req, res) => {
     const { cant } = req.query
 
     console.log(cant)
@@ -71,7 +71,7 @@ router.get('/api/randoms', (req, res) => {
         forked.send(cant)
     }
 
-    forked.on('message', msg => {
+    await forked.on('message', msg => {
         res.json({
             random_numbers: msg,
         })
