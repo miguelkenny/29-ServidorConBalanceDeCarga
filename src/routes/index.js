@@ -78,4 +78,9 @@ router.get('/api/randoms', (req, res) => {
     })
 })
 
+// Ruta para Desafio 29
+router.get('/api/randoms/datos', (req, res) => {
+    res.send('Server Desafio 29')
+})
+
 module.exports = router

@@ -6,67 +6,77 @@ const path = require('path')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('connect-flash')
-const parseArgs = require('minimist')
 const { Server: IOServer } = require('socket.io')
+const os = require('os')
+const cluster = require('cluster')
 
 //Inicializaciones
 const app = express()
 require('./database')
 require('./passport/local-auth')
 
-const args = parseArgs(process.argv.slice(2), {
-	alias: {
-		p: 'port',
-	},
-	default: {
-		port: 8080,
-	},
-})
-
-//Congiguracion
-app.use(express.static(path.join(__dirname, 'views/js')))
-app.set('views', path.join(__dirname, 'views'))
-app.engine('ejs', engine)
-app.set('view engine', 'ejs')
-
-//Middlewares
-app.use(express.urlencoded({ extended: true }))
-app.use(session({
-	secret: 'coderhouse',
-	resave: false,
-	saveUninitialized: false
-}))
-app.use(flash())
-app.use(passport.initialize())
-app.use(passport.session())
-
-app.use((req, res, next) => {
-	app.locals.signupMessage = req.flash('signupMessage')
-	app.locals.signinMessage = req.flash('signinMessage')
-	app.locals.user = req.user
-	next()
-})
-
-//Rutas
-app.use('/', routes)
-
-//Inicializar Servidor
-app.set('port', args.port || 3000)
+const cpus = os.cpus()
+const PORT = Number(process.argv[2]) || 3000
+const iscluster = process.argv[3] === "cluster"
 
 const server = http.createServer(app)
 const io = new IOServer(server)
+
+if (iscluster && cluster.isPrimary) {
+    cpus.map(() => {
+        cluster.fork()
+    })
+
+    cluster.on('exit', (worker) => {
+        console.log(`Worker ${worker.process.pid} muerto`)
+        cluster.fork()
+    })
+} else {
+    //Congiguracion
+    app.use(express.static(path.join(__dirname, 'views/js')))
+    app.set('views', path.join(__dirname, 'views'))
+    app.engine('ejs', engine)
+    app.set('view engine', 'ejs')
+
+    //Middlewares
+    app.use(express.urlencoded({ extended: true }))
+    app.use(session({
+        secret: 'coderhouse',
+        resave: false,
+        saveUninitialized: false
+    }))
+
+    app.use(flash())
+    app.use(passport.initialize())
+    app.use(passport.session())
+
+    app.use((req, res, next) => {
+        app.locals.signupMessage = req.flash('signupMessage')
+        app.locals.signinMessage = req.flash('signinMessage')
+        app.locals.user = req.user
+        next()
+    })
+
+    //Rutas
+    app.use('/', routes)
+
+    // Escuchando puerto con minimist
+    server.listen(PORT, () => {
+        console.log(`Servidor escuchando puerto', ${PORT}`)
+    })
+}
 
 //Utilizamos Socket
 io.on('connection', (socket) => {
     console.log('New Connection!!!', socket.id);
 
-    const prod = {nombre:"Aksksks", precio: 123, url:"http://google.com"}
-    let messages = {email:"a@email.com", message:"Hola", date: new Date().getTime()}
+    /*const prod = { nombre: "Aksksks", precio: 123, url: "http://google.com" }
+    let messages = { email: "a@email.com", message: "Hola", date: new Date().getTime() }
 
     io.emit('server:products', prod)
     io.emit('server:message', messages)
 
-    /* socket.on('server:products', async productsInfo => {
+     socket.on('server:products', async productsInfo => {
 
         products.insertProduct(productsInfo)
 
@@ -84,9 +94,4 @@ io.on('connection', (socket) => {
 
         io.emit('server:message', messages)
     }) */
-})
-
-// Escuchando puerto con minimist
-server.listen(args.port, () => {
-	console.log(`Servidor escuchando puerto', ${args.port}`)
 })
