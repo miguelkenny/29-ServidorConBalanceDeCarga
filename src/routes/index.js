@@ -79,6 +79,8 @@ router.get('/api/randoms', (req, res) => {
 })
 
 // Ruta para Desafio 29
+// Para no duplicar los servidores, apunto al mismo endpoint probandolos en distintos momentos. No se detectaron errores
+
 router.get('/api/randoms/datos', (req, res) => {
     res.send(`Server Desafio 29 - En puerto ${process.argv[2]}`)
 })

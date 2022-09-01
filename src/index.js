@@ -15,13 +15,19 @@ const app = express()
 require('./database')
 require('./passport/local-auth')
 
+
+/* Desafio 29 */
 const cpus = os.cpus()
 const PORT = Number(process.argv[2]) || 3000
 const iscluster = process.argv[3] === "cluster"
 
+// 
+
+
 const server = http.createServer(app)
 const io = new IOServer(server)
 
+//Desafio 29: Si estamnos en modo cluster mapeamos los cpus y creamos nuevos cluster cada vez que muera cada uno
 if (iscluster && cluster.isPrimary) {
     cpus.map(() => {
         cluster.fork()
@@ -32,6 +38,7 @@ if (iscluster && cluster.isPrimary) {
         cluster.fork()
     })
 } else {
+    // Si estamos en modo Fork escuchamos el puerto
     //Congiguracion
     app.use(express.static(path.join(__dirname, 'views/js')))
     app.set('views', path.join(__dirname, 'views'))
@@ -65,6 +72,14 @@ if (iscluster && cluster.isPrimary) {
         console.log(`Servidor escuchando puerto', ${PORT}`)
     })
 }
+
+
+//******************/
+
+// SOCKET IO
+
+//******************/
+// Aún no pude hacerlo funcionar con plantillas
 
 //Utilizamos Socket
 io.on('connection', (socket) => {
