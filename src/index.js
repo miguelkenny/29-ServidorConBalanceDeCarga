@@ -10,11 +10,16 @@ const { Server: IOServer } = require('socket.io')
 const os = require('os')
 const cluster = require('cluster')
 
+const Product = require('./models/products')
+const Message = require('./models/messages')
+
 //Inicializaciones
 const app = express()
 require('./database')
 require('./passport/local-auth')
 
+const newArrayProduct = []
+const newArrayMessage = []
 
 /* Desafio 29 */
 const cpus = os.cpus()
@@ -40,7 +45,7 @@ if (iscluster && cluster.isPrimary) {
 } else {
     // Si estamos en modo Fork escuchamos el puerto
     //Congiguracion
-    app.use(express.static(path.join(__dirname, 'views/clientSocket')))
+    app.use(express.static(path.join(__dirname, 'views')))
     app.set('views', path.join(__dirname, 'views'))
     app.engine('ejs', engine)
     app.set('view engine', 'ejs')
@@ -83,31 +88,44 @@ if (iscluster && cluster.isPrimary) {
 
 //Utilizamos Socket
 
-io.on('connection', (socket) => {
+io.on('connect', async (socket) => {
     console.log('New Connection!!!', socket.id);
 
-    /*const prod = { nombre: "Aksksks", precio: 123, url: "http://google.com" }
-    let messages = { email: "a@email.com", message: "Hola", date: new Date().getTime() }
+    let prod = await Product.find()
+    let messages = await Message.find()
 
     io.emit('server:products', prod)
     io.emit('server:message', messages)
 
-     socket.on('server:products', async productsInfo => {
+    socket.on('server:products', async productsInfo => {
 
-        products.insertProduct(productsInfo)
+        const newProduct = new Product()
+        newProduct.nombre = productsInfo.nombre
+        newProduct.precio = productsInfo.precio
+        newProduct.url = productsInfo.url
 
-        const prod = products.getAll()
+        await newProduct.save()
+
+        const prod = await Product.find()
         io.emit('server:products', prod)
 
-    })
+    })  
 
-    socket.on('client:message', async messageInfo => {
+    socket.on('client:message', async (messageInfo) => {
         const date = new Date(Date.now()).toLocaleString().replace(',', '');
         messageInfo.date = date
 
-        mensajes.insertMessage(messageInfo)
-        let messages = await mensajes.getMessages()
+        const newMessage = new Message()
+        newMessage.email = messageInfo.email
+        newMessage.message = messageInfo.message
+        newMessage.date = messageInfo.date
+
+        await newMessage.save()
+
+        newArrayMessage.push(newMessage)
+
+        let messages = newArrayMessage
 
         io.emit('server:message', messages)
-    }) */
+    })
 })

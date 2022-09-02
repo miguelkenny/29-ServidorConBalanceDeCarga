@@ -4,7 +4,7 @@ const { Schema } = require('mongoose')
 
 const prodcutsSchema = new Schema({
     nombre: { type: String, required: true},
-    precio: { type: Integer, required: true },
+    precio: { type: String, required: true },
     url: { type: String, required: true }
 })
 

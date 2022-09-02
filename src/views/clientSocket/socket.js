@@ -1,5 +1,5 @@
 const socket = io()
-console.log('Estoy en socket.js');
+console.log('AAAAAAAAAA');
 //DATOS DEL PRODUCTO
 const formProducts = document.querySelector('#formProducts')
 const idProduct = document.querySelector('#idProduct')
@@ -27,14 +27,16 @@ function sendMessage() {
 
 function renderMessage(messageData) {
     try {
+        console.log(messageData);
         const html = messageData.map(message => {
+            
             return (
                 `<div>
-                    <strong style="color: blue;" >${message.email}</strong>
-                    <span style="color: brown;">[${message.date}]</span>
-                    <i style="color: green;">${message.message}</i>
-                </div>
-                `
+                    <strong style="" >${message.email}</strong>
+                    /* <span style="">[${message.date}]</span>
+                    <i style="">${message.message}</i> */
+                </div>`
+                
             )
         }).join('')
 
