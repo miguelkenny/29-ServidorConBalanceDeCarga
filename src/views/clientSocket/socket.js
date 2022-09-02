@@ -6,6 +6,7 @@ const idProduct = document.querySelector('#idProduct')
 const nameProduct = document.querySelector('#nameProduct')
 const priceProduct = document.querySelector('#priceProduct')
 const imgProduct = document.querySelector('#imgProduct')
+const tableProducts = document.querySelector('#tableProducts')
 
 //DATOS DEL USUARIO
 const formMessages = document.querySelector('#formMessages')
@@ -27,16 +28,16 @@ function sendMessage() {
 
 function renderMessage(messageData) {
     try {
-        console.log(messageData);
+
         const html = messageData.map(message => {
-            
+
             return (
                 `<div>
                     <strong style="" >${message.email}</strong>
                     /* <span style="">[${message.date}]</span>
                     <i style="">${message.message}</i> */
                 </div>`
-                
+
             )
         }).join('')
 
@@ -62,15 +63,32 @@ function sendProducts() {
 }
 async function renderProducts(products) {
     console.log(products);
-    const res = await fetch('/productsTemplate.hbs')
-    const plantilla = await res.text()
-    document.querySelector('#tableProducts').innerHTML = ''
+    const html = products.map(prod => {
 
-    products.forEach(product => {
-        const template = Handlebars.compile(plantilla)
-        const html = template(product);
-        document.querySelector('#tableProducts').innerHTML += html
-    })
+        return (
+            `
+                <tr>
+                    <td style="" >
+                        ${prod._id}
+                    </td>
+                    <td style="" >
+                        ${prod.nombre}
+                    </td>
+                    <td style="">
+                        ${prod.precio}
+                    </td>
+                    <td style="">
+                        <img src=${prod.url} alt=${prod.nombre} style="width: 35px"/>
+                    </td>
+                </tr>
+            `
+
+        )
+    }).join('')
+
+    tableProducts.innerHTML = html
+    tableProducts.value = ""
+
     formProducts.reset()
 }
 

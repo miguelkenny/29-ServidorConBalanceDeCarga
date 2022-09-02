@@ -84,7 +84,7 @@ if (iscluster && cluster.isPrimary) {
 // SOCKET IO
 
 //******************/
-// Aún no pude hacerlo funcionar con plantillas
+// Aún no pude hacerlo funcionar
 
 //Utilizamos Socket
 
