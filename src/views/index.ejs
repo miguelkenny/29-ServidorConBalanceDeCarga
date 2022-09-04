@@ -2,8 +2,8 @@
 
 <div class="row p-4">
   <h1>Incio</h1>
-  
-  <div class="container border rounded mt-4 shadow"      id="divAddProduct">
+
+  <div class="container border rounded mt-4 shadow d-none" id="divAddProduct">
     <div class="text-center mt-5">
       <p class="display-4">Cargar Productos</p>
     </div>
@@ -90,3 +90,10 @@
     </form>
   </div>
 </div>
+
+<% if(user) { %>
+  <script defer>
+    document.getElementById("divAddProduct").classList.remove("d-none");
+    document.getElementById("divAddProduct").classList.add("d-inline");
+  </script>
+<% } %>
