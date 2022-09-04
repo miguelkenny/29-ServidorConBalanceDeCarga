@@ -1,5 +1,5 @@
 const socket = io()
-console.log('AAAAAAAAAA');
+
 //DATOS DEL PRODUCTO
 const formProducts = document.querySelector('#formProducts')
 const idProduct = document.querySelector('#idProduct')
@@ -62,7 +62,7 @@ function sendProducts() {
     }
 }
 async function renderProducts(products) {
-    console.log(products);
+    
     const html = products.map(prod => {
 
         return (
@@ -92,11 +92,13 @@ async function renderProducts(products) {
     formProducts.reset()
 }
 
+//Escuchamos el evento Submit cuando se carga un producto nuevo
 formProducts.addEventListener('submit', e => {
     e.preventDefault()
     sendProducts()
 })
 
+//Escuchamos el evento Submit cuando se envía un mensaje nuevo
 formMessages.addEventListener('submit', e => {
     e.preventDefault()
     sendMessage()

@@ -33,9 +33,9 @@ router.post('/login', passport.authenticate('local-login', {
 
 router.get('/logout', (req, res) => {
     req.logout(req.user, err => {
-        if(err) return next(err);
+        if (err) return next(err);
         res.redirect("/");
-      });
+    });
 })
 
 router.get('/profile', isAuthenticated, (req, res) => {
